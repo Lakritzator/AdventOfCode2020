@@ -11,6 +11,10 @@ namespace AdventOfCode.Solutions
     {
         private readonly List<Dictionary<string, string>> _passports = new List<Dictionary<string, string>>();
 
+        /// <summary>
+        /// Add passport data to the list of passports
+        /// </summary>
+        /// <param name="currentPassport"></param>
         private void AddPassport(string currentPassport)
         {
             if (string.IsNullOrEmpty(currentPassport))
@@ -28,7 +32,6 @@ namespace AdventOfCode.Solutions
         {
             Assert.True(File.Exists(InputFilename));
 
-            // Read file into maze
             var passportFile = File.ReadAllLines(this.InputFilename);
             var passportString = "";
             foreach(var passportLine in passportFile)
