@@ -1,47 +1,85 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Xunit;
 
 namespace AdventOfCode.Solutions
 {
     public class Day13 : AdventOfCodeBase
     {
-        private readonly int _earliestDepartTime;
-        private readonly int[] _potentialBusIds;
+        private readonly long _earliestDepartTime;
+        private readonly long[] _potentialBusIds;
 
         public Day13()
         {
             Assert.True(File.Exists(InputFilename));
 
             var inputLines = File.ReadAllLines(this.InputFilename);
-            _earliestDepartTime = int.Parse(inputLines.First());
+            _earliestDepartTime = long.Parse(inputLines.First());
 
-            _potentialBusIds = inputLines[1].Split(',').Where(s => !"x".Equals(s)).Select(s => int.Parse(s)).ToArray();
+            _potentialBusIds = ExtractBusIds(inputLines[1]);
+        }
+        private static long[] ExtractBusIds(string busData)
+        {
+            return busData.Split(',').Select(s => "x".Equals(s) ? 0 : long.Parse(s)).ToArray();
         }
 
         public override string AnswerPartOne()
         {
             // find next department times
-            var nextDepartureTime = _potentialBusIds
+            var (BusId, WaitingTime) = _potentialBusIds
+                .Where(potentialBusId => potentialBusId > 0)
                 .Select(potentialBusId =>
                     {
-                        int nextTime = (int)(Math.Ceiling((float)_earliestDepartTime / (float)potentialBusId) * potentialBusId);
-                        var waitingTime = nextTime - _earliestDepartTime;
-                        return (potentialBusId, waitingTime);
+                        return (BusId: potentialBusId, WaitingTime: CalculateWaitingTime(_earliestDepartTime, potentialBusId));
                     }
                 )
-                .OrderBy(busInfo => busInfo.waitingTime)
+                .OrderBy(busInfo => busInfo.WaitingTime)
                 .First();
-            var answer = nextDepartureTime.potentialBusId * nextDepartureTime.waitingTime;
+            var answer = BusId * WaitingTime;
             return $"{answer}";
+        }
+
+        private static long CalculateWaitingTime(long earliestTime, long busId)
+        {
+            var modulo = earliestTime % busId;
+            return modulo == 0 || earliestTime == 0 ? 0 : busId - modulo;
         }
 
         public override string AnswerPartTwo()
         {
-            var answer = 0;
+            // To see if the examples match, use these values
+            //var potentialBusIds = ExtractBusIds("17,x,13,19");
+            //var potentialBusIds = ExtractBusIds("67,7,59,61");
+            //var potentialBusIds = ExtractBusIds("67,x,7,59,61");
+            //var potentialBusIds = ExtractBusIds("67,7,x,59,61");
+            //var potentialBusIds = ExtractBusIds("1789,37,47,1889");
+            var potentialBusIds = _potentialBusIds;
+
+            long time = 0;
+            long increment = 1;
+
+            var answer = potentialBusIds
+                .Select((id, index) => (Id: id, Offset: index))
+                .Where(bus => bus.Id != 0)
+                .OrderBy(bus => bus.Offset)
+                .Select((bus,index) =>
+                {
+                    // Skip first
+                    if (index == 0)
+                    {
+                        increment = bus.Id;
+                        return 0;
+                    }
+                    long remainder = 0;
+                    do
+                    {
+                        time += increment;
+                        remainder = (time + bus.Offset) % bus.Id;
+                    } while (remainder != 0);
+                    increment *= bus.Id;
+                    return time;
+                }).Last();
+
             return $"{answer}";
         }
 

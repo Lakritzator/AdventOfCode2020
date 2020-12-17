@@ -21,6 +21,8 @@ namespace AdventOfCode
                 Console.WriteLine($"\tthe part one answer is: {daySolution.AnswerPartOne()}");
                 Console.WriteLine($"\tthe part two answer is: {daySolution.AnswerPartTwo()}");
             }
+            Console.WriteLine("Ready.");
+            Console.ReadLine();
         }
     }
 }
