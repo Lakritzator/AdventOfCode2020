@@ -17,7 +17,7 @@ namespace AdventOfCode.Solutions
             _boardingPasses = File.ReadAllLines(this.InputFilename);
         }
 
-        public (int Row, int Seat, int ID) CalculateRowSeat(string partitioningData)
+        public static (int Row, int Seat, int ID) CalculateRowSeat(string partitioningData)
         {
             var currentRange = (Low: 0, High: 127);
             foreach(char part in partitioningData)
@@ -63,8 +63,8 @@ namespace AdventOfCode.Solutions
             int answer = 0;
             foreach(var boardingPass in _boardingPasses)
             {
-                var boardingPassRowSeat = CalculateRowSeat(boardingPass);
-                answer = Math.Max(boardingPassRowSeat.ID, answer);
+                var (Row, Seat, ID) = CalculateRowSeat(boardingPass);
+                answer = Math.Max(ID, answer);
             }
             return $"{answer}";
         }
