@@ -34,10 +34,10 @@ namespace AdventOfCode.Solutions
             // Validate input
             Assert.True(twoEntriesWithSumEqualsTo2020.Count == 1);
 
-            var answer = twoEntriesWithSumEqualsTo2020.First();
+            var (First, Second) = twoEntriesWithSumEqualsTo2020.First();
 
-            Debug.WriteLine($"Day one, part one, check: {answer.First} + {answer.Second} = 2020, answer: {answer.First} * {answer.Second} = {answer.First * answer.Second}");
-            return $"{answer.First * answer.Second}";
+            Debug.WriteLine($"Day one, part one, check: {First} + {Second} = 2020, answer: {First} * {Second} = {First * Second}");
+            return $"{First * Second}";
         }
 
         public override string AnswerPartTwo()
@@ -56,9 +56,9 @@ namespace AdventOfCode.Solutions
 
             // Validate input
             Assert.True(threeEntriesWithSumEqualsTo2020.Count == 1);
-            var answer = threeEntriesWithSumEqualsTo2020.First();
-            Debug.WriteLine($"Day one, part two, check: {answer.First} + {answer.Second} + {answer.Third} = 2020, answer: {answer.First} * {answer.Second} * {answer.Third}= {answer.First * answer.Second * answer.Third}");
-            return $"{answer.First * answer.Second * answer.Third}";
+            var (First, Second, Third) = threeEntriesWithSumEqualsTo2020.First();
+            Debug.WriteLine($"Day one, part two, check: {First} + {Second} + {Third} = 2020, answer: {First} * {Second} * {Third}= {First * Second * Third}");
+            return $"{First * Second * Third}";
         }
 
     }

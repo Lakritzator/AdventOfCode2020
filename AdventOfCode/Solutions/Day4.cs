@@ -23,7 +23,7 @@ namespace AdventOfCode.Solutions
             }
             var passport = Regex
                         .Matches(currentPassport, @"([a-zA-Z0-9#]+):([a-zA-Z0-9#]+)\s+")
-                        .Select(m => (Key: m.Groups[1].Value, Value: m.Groups[2].Value))
+                        .Select(m => (Key: m.Groups[1].Value, m.Groups[2].Value))
                         .ToDictionary(kv => kv.Key, k => k.Value);
             _passports.Add(passport);
         }
